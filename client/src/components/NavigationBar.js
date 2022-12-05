@@ -18,6 +18,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import MenuIcon from '@mui/icons-material/Menu';
 import TextField from '@mui/material/TextField';
+import { Grid } from '@mui/material';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -101,10 +102,10 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{flexGrow: 1}}>
             <AppBar position="static" sx={{backgroundColor:"orange"}}>
+                <Grid>
                 <Toolbar>
-                    <Box sx={{display:'flex', justifyContent:'space-between'}}>
+                    <Grid item xs={3}>
                         <IconButton
                             size='large'
                             edge='start'>
@@ -120,28 +121,20 @@ export default function AppBanner() {
                             edge='start'>
                             <PersonIcon fontSize='large'/>
                         </IconButton>
-                    </Box>
-                    <TextField label='Search' variant='outlined' />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block', color: 'black' } }}
-                    >
-                        SORT BY
-                    </Typography>
-                    <Box sx={{display:'flex', justifyContent:'right'}}>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <TextField label='Search' variant='outlined' />
+                    </Grid>
+                    <Grid item x={0.8}>Sort By</Grid>
+                    <Grid item x={2.2}>
                         <IconButton
                             size='large'
                             edge='end'>
                             <MenuIcon fontSize='large'/>
                         </IconButton>
-                    </Box>
+                    </Grid>
                 </Toolbar>
+                </Grid>
             </AppBar>
-            {
-                menu
-            }
-        </Box>
     );
 }

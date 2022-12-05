@@ -78,7 +78,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -106,7 +106,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter + 1,
@@ -120,7 +120,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -258,7 +258,7 @@ function GlobalStoreContextProvider(props) {
                                         playlist: playlist
                                     }
                                 });
-                                store.setCurrentList(id);
+                                //store.setCurrentList(id);
                             }
                         }
                         getListPairs(playlist);
@@ -272,18 +272,18 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
+        console.log(store.currentList);
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
         tps.clearAllTransactions();
-        history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        const response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.userName);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -293,9 +293,8 @@ function GlobalStoreContextProvider(props) {
                 payload: newList
             }
             );
-
+            store.loadIdNamePairs();
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -387,28 +386,19 @@ function GlobalStoreContextProvider(props) {
     store.isErrorModalOpen = () => {
         return store.currentModal === CurrentModal.ERROR;
     }
+    store.isCurrentListThis = (list) => {
+        return store.currentList===list;
+    }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
     // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
     // moveItem, updateItem, updateCurrentList, undo, and redo
-    store.setCurrentList = function (id) {
-        async function asyncSetCurrentList(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-
-                response = await api.updatePlaylistById(playlist._id, playlist);
-                if (response.data.success) {
-                    storeReducer({
-                        type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
-                    });
-                    history.push("/playlist/" + playlist._id);
-                }
-            }
-        }
-        asyncSetCurrentList(id);
+    store.setCurrentList = function (list) {
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_LIST,
+            payload: list
+        });
     }
 
     store.getPlaylistSize = function() {

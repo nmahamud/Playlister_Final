@@ -20,14 +20,14 @@ function Statusbar() {
     const { store } = useContext(GlobalStoreContext);
     console.log("logged in: " +  auth.loggedIn);
     let text ="";
-    if (auth.loggedIn && store.currentList){
-        text = store.currentList.name;
-    return (
-        <div id="playlister-statusbar">
-            {text}
-        </div>
-    );
-    }
+    // if (auth.loggedIn && store.currentList){
+    //     text = store.currentList.name;
+    // return (
+    //     <div id="playlister-statusbar">
+    //         {text}
+    //     </div>
+    // );
+    // }
     return null;
 }
 /*<input type="button" 

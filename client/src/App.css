@@ -54,7 +54,7 @@ body {
   border-radius: 10px;
 }
 #splash-screen {
-  background-image: url("https://www.gifcen.com/wp-content/uploads/2022/03/rickroll-gif-7.gif");
+  background-image: linear-gradient(to bottom, #ffff00, #ff00d0);
   background-size: cover;
   color: rgb(0, 0, 0);
   font-size: 10vw;
@@ -63,7 +63,7 @@ body {
   border-style: solid;
   border-radius: 2px;
   padding-top: 1%;
-  padding-bottom: 14%;
+  padding-bottom: 15%;
   height:70%;
   text-align: center;
   vertical-align: center;
@@ -151,7 +151,6 @@ body {
 #list-selector-list {
   position: absolute;
   left: 0%;
-  top: 10%;
   width: 100%;
   height: 90%;
   display: flex;
@@ -159,6 +158,23 @@ body {
   overflow: scroll;
 }
 
+/* Split the screen in half */
+.split {
+  height: 90%;
+  width: 50%;
+  position: absolute;
+  overflow-x: hidden;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+}
 
 .list-card,
 .selected-list-card,
