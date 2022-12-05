@@ -13,6 +13,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import PersonIcon from '@mui/icons-material/Person';
+import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+import MenuIcon from '@mui/icons-material/Menu';
+import TextField from '@mui/material/TextField';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -97,28 +102,39 @@ export default function AppBanner() {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{backgroundColor:"orange"}}>
                 <Toolbar>
-                    <Typography                        
-                        variant="h4"
+                    <Box sx={{display:'flex', justifyContent:'space-between'}}>
+                        <IconButton
+                            size='large'
+                            edge='start'>
+                            <HomeIcon fontSize='large'/>
+                        </IconButton>
+                        <IconButton
+                            size='large'
+                            edge='start'>
+                            <PeopleIcon fontSize='large'/>
+                        </IconButton>
+                        <IconButton
+                            size='large'
+                            edge='start'>
+                            <PersonIcon fontSize='large'/>
+                        </IconButton>
+                    </Box>
+                    <TextField label='Search' variant='outlined' />
+                    <Typography
+                        variant="h6"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
+                        sx={{ display: { xs: 'none', sm: 'block', color: 'black' } }}
                     >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><img style={{ height: 'auto', width:'50%' }}src='playlister.png'></img></Link>
+                        SORT BY
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ height: "90px", display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{display:'flex', justifyContent:'right'}}>
                         <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            { getAccountMenu(auth.loggedIn) }
+                            size='large'
+                            edge='end'>
+                            <MenuIcon fontSize='large'/>
                         </IconButton>
                     </Box>
                 </Toolbar>

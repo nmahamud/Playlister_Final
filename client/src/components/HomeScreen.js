@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import NavigationBar from './NavigationBar'
+import WorkspaceScreen from './WorkspaceScreen'
 
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
@@ -48,8 +50,8 @@ const HomeScreen = () => {
     }
     return (
         <div id="playlist-selector">
-            <div id="list-selector-heading">
-            <Fab sx={{transform:"translate(-20%, 0%)"}}
+            {/* <div id="list-selector-heading"> */}
+            {/* <Fab sx={{transform:"translate(-20%, 0%)"}}
                 color="primary" 
                 aria-label="add"
                 id="add-list-button"
@@ -57,13 +59,21 @@ const HomeScreen = () => {
             >
                 <AddIcon />
             </Fab>
-                Your Playlists
-            </div>
-            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
-                {
-                    listCard
-                }
-                <MUIDeleteModal />
+                Your Playlists */}
+            <Box>
+                <NavigationBar></NavigationBar>
+            </Box>
+            {/* </div> */}
+            <Box className='split left'>
+                <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
+                    {
+                        listCard
+                    }
+                    <MUIDeleteModal />
+                </Box>
+            </Box>
+            <Box className='split right'>
+                
             </Box>
         </div>)
 }
