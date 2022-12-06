@@ -10,6 +10,7 @@ import YouTubePlayer from './YouTubePlayer';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
+import YouTubeComments from './YouTubeComments';
 
 
 export default function YouTubeWrapper() {
@@ -49,6 +50,9 @@ export default function YouTubeWrapper() {
                 <Button variant="contained" onClick={handleComments}>
                     Comments
                 </Button>
+                <Box>
+                    <YouTubeComments />
+                </Box>
             </Box>
         );
     }

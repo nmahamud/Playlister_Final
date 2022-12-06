@@ -16,6 +16,8 @@ import WorkspaceScreen from './WorkspaceScreen'
 import NavigationBar from './NavigationBar'
 import YouTubePlayer from './YouTubePlayer'
 import YouTubeWrapper from './YouTubeWrapper'
+import CommentCard from './CommentCard'
+import YouTubeComments from './YouTubeComments'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -40,4 +42,6 @@ export {
     WorkspaceScreen,
     NavigationBar,
     YouTubePlayer,
-    YouTubeWrapper }
+    YouTubeWrapper,
+    CommentCard,
+    YouTubeComments }
