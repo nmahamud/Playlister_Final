@@ -389,6 +389,9 @@ function GlobalStoreContextProvider(props) {
     store.isCurrentListThis = (list) => {
         return store.currentList===list;
     }
+    store.getCurrentList = () => {
+        return store.currentList.songs;
+    }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE

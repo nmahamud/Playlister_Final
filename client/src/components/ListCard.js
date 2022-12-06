@@ -13,6 +13,10 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import SongCard from './SongCard';
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import AddSongCard from './AddSongCard';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import { textAlign } from '@mui/system';
 
 
 /*
@@ -37,8 +41,9 @@ function ListCard(props) {
         modalJSX = <MUIRemoveSongModal />;
     }
 
-    const handleLoadChange = async (list) => {
-        setExpand(store.isCurrentListThis(list));
+    function handleLoadChange(list) {
+        let bool = store.isCurrentListThis(list)
+        setExpand(bool);
     }
 
     function handleLoadList(event, id, list) {
@@ -49,17 +54,35 @@ function ListCard(props) {
                 _id = ("" + _id).substring("list-card-text-".length);
 
             console.log("load " + event.target.id);
-            console.log(list);
-            console.log(expand);
+
             // CHANGE THE CURRENT LIST
-            // async function internalChange(id, list) {
-            //     store.setCurrentList(id);
-            //     console.log(store.currentList);
-            //     handleLoadChange(list);
-            // }
-            // internalChange(id, list);
+            if (!store.isCurrentListThis(list))
+                setExpand(false);
+            store.closeCurrentList(list);
             store.setCurrentList(list);
-            handleLoadChange(list);
+        }
+    }
+
+    function handleOpenList(event, id, list) {
+        console.log("handleLoadList for " + id);
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+
+            console.log("load " + event.target.id);
+
+            // CHANGE THE CURRENT LIST
+            if (!expand) {
+                store.closeCurrentList(list);
+                store.setCurrentList(list);
+                setExpand(true);
+            }
+            else {
+                store.closeCurrentList();
+                setExpand(false);
+            }
+            
         }
     }
 
@@ -74,6 +97,7 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             store.closeCurrentList();
+            setExpand(false);
         }
     }
 
@@ -116,16 +140,248 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-        let cardElement =
+    let cardElement = "";
+//     if (store.currentList) {
+//     if (store.currentList != idNamePair) {
+//         cardElement = 
+//         <div>
+//             <ListItem
+//                     id={idNamePair._id}
+//                     key={idNamePair._id}
+//                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+//                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+//                     button
+//                     onClick={(event) => {
+//                         handleLoadList(event, idNamePair._id, idNamePair)
+//                     }}
+//                     >
+//                     <Box sx={{ p:1, fontSize: 30 }}>
+//                             {idNamePair.name}
+//                         <Box sx={{ fontSize: 20 }}>
+//                             By {idNamePair.userName}
+//                         </Box>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <ThumbUpIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton>
+//                             <ThumbDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <EditIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={(event) => {
+//                                 handleDeleteList(event, idNamePair._id)
+//                                }} aria-label='delete'>
+//                             <DeleteIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1, textAlign:"right"}}>
+//                         <IconButton onClick={(event) => {
+//                                 handleOpenList(event, idNamePair._id, idNamePair)
+//                                }} aria-label='delete'>
+//                             <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//             </ListItem>
+//         </div>
+//     }
+//     else {
+//         if (!expand) {
+//             cardElement = 
+//         <div>
+//             <ListItem
+//                     id={idNamePair._id}
+//                     key={idNamePair._id}
+//                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+//                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+//                     button
+//                     onClick={(event) => {
+//                         handleLoadList(event, idNamePair._id, idNamePair)
+//                     }}
+//                     >
+//                     <Box sx={{ p:1, fontSize: 30 }}>
+//                             {idNamePair.name}
+//                         <Box sx={{ fontSize: 20 }}>
+//                             By {idNamePair.userName}
+//                         </Box>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <ThumbUpIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton>
+//                             <ThumbDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <EditIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={(event) => {
+//                                 handleDeleteList(event, idNamePair._id)
+//                                }} aria-label='delete'>
+//                             <DeleteIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1, textAlign:"right"}}>
+//                         <IconButton onClick={(event) => {
+//                                 handleOpenList(event, idNamePair._id, idNamePair)
+//                                }} aria-label='delete'>
+//                             <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//             </ListItem>
+//         </div>
+//         }
+//         else {
+//             cardElement = 
+//         <div>
+//             <ListItem
+//                     id={idNamePair._id}
+//                     key={idNamePair._id}
+//                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+//                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+//                     button
+//                     onClick={(event) => {
+//                         handleLoadList(event, idNamePair._id, idNamePair)
+//                     }}
+//                     >
+//                     <Box sx={{ p:1, fontSize: 30 }}>
+//                             {idNamePair.name}
+//                         <Box sx={{ fontSize: 20 }}>
+//                             By {idNamePair.userName}
+//                         </Box>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <ThumbUpIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton>
+//                             <ThumbDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <EditIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1 }}>
+//                         <IconButton onClick={(event) => {
+//                                 handleDeleteList(event, idNamePair._id)
+//                                }} aria-label='delete'>
+//                             <DeleteIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//                     <Box sx={{ p: 1, textAlign:"right"}}>
+//                         <IconButton onClick={(event) => {
+//                                 handleCloseList(event, idNamePair._id, idNamePair)
+//                                }} aria-label='delete'>
+//                             <KeyboardDoubleArrowUpIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//             </ListItem>
+//             <Box id ='song-cards-container' sx = {{overflowY:'auto', maxHeight: 250}}>
+//                 <List 
+//                    id="playlist-cards" 
+//                    sx={{ width: '100%', bgcolor: 'background.paper', height:'%5' }}
+//                 >
+//                    {
+//                         idNamePair.songs.map((song, index) => (
+//                             <SongCard
+//                                 id={'playlist-song-' + (index)}
+//                                 key={'playlist-song-' + (index)}
+//                                 index={index}
+//                                 song={song}
+//                             />
+//                         ))
+//                     }
+//                     <AddSongCard />
+//                 </List>
+//                 { modalJSX }
+//             </Box>
+//         </div>
+//     }   
+//         }
+// }
+// else {
+//     cardElement = 
+//         <div>
+//             <ListItem
+//                     id={idNamePair._id}
+//                     key={idNamePair._id}
+//                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+//                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+//                     button
+//                     onClick={(event) => {
+//                         handleLoadList(event, idNamePair._id, idNamePair)
+//                     }}
+//                     >
+//                     <Box sx={{ p:1, fontSize: 30 }}>
+//                             {idNamePair.name}
+//                         <Box sx={{ fontSize: 20 }}>
+//                             By {idNamePair.userName}
+//                         </Box>
+//                     </Box>
+//                     <Box textAlight="right" sx={{ p: 1 }}>
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <ThumbUpIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     {/* </Box> */}
+
+//                     {/* <Box sx={{ p: 1 }}> */}
+//                         <IconButton>
+//                             <ThumbDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     {/* </Box>
+//                     <Box sx={{ p: 1 }}> */}
+//                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
+//                             <EditIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     {/* </Box>
+//                     <Box sx={{ p: 1 }}> */}
+//                         <IconButton onClick={(event) => {
+//                                 handleDeleteList(event, idNamePair._id)
+//                                }} aria-label='delete'>
+//                             <DeleteIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     {/* </Box>
+//                     <Box sx={{ p: 1, textAlign:"right"}}> */}
+//                         <IconButton onClick={(event) => {
+//                                 handleOpenList(event, idNamePair._id, idNamePair)
+//                                }} aria-label='delete'>
+//                             <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
+//                         </IconButton>
+//                     </Box>
+//             </ListItem>
+//         </div>
+// }
+        cardElement =
         <div>
-            <Accordion expanded={store.isCurrentListThis(idNamePair)} onChange={(e,expanded) => { if (expanded){
+            <Accordion expanded={store.isCurrentListThis(idNamePair) && expand} onChange={(e,expanded) => { if (expanded){
                     handleLoadList(e, idNamePair._id, idNamePair);}
-            else {
-                   handleCloseList(e, idNamePair._id)
-            }
+            // else {
+            //        handleCloseList(e, idNamePair._id)
+            // }
         }}>
                 <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon onClick={(event)=>{handleOpenList(event, idNamePair._id, idNamePair)}}/>}
                     aria-controls={"itemcard"+idNamePair._id}
                     id={"itemcard"+idNamePair._id}
                     onClick={(event) => {
@@ -154,8 +410,7 @@ function ListCard(props) {
                                 <ThumbUpIcon style={{fontSize:'48pt'}} />
                             </IconButton>
                         </Box>
-
-                        <Box sx={{ p: 1 }}>
+                      <Box sx={{ p: 1 }}>
                             <IconButton>
                                 <ThumbDownIcon style={{fontSize:'48pt'}} />
                             </IconButton>
@@ -188,15 +443,16 @@ function ListCard(props) {
                                         index={index}
                                         song={song}
                                     />
-                                ))  
+                                ))
                             }
+                            <AddSongCard />
                         </List>
                         { modalJSX }
                     </Box>
                 </AccordionDetails>
             </Accordion>
         </div>
-            
+         
     // }
 
     if (editActive) {

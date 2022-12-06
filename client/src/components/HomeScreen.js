@@ -9,6 +9,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
+import YouTubePlayer from './YouTubePlayer'
+import YouTubeWrapper from './YouTubeWrapper'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -73,7 +75,7 @@ const HomeScreen = () => {
                 </Box>
             </Box>
             <Box className='split right'>
-                
+                    <YouTubeWrapper />
             </Box>
         </div>)
 }
