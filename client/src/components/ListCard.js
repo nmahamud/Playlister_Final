@@ -36,8 +36,20 @@ function ListCard(props) {
     const [expand, setExpand] = useState(false);
     const { idNamePair, selected } = props;
     const [ publish, setPublish ] = useState(store.currentList != null);
+    const [ like, setLike ] = useState(0);
+    const [ dislike, setDislike ] = useState(0);
     
     let thisList = false;
+    let likeCount=0;
+    let dislikeCount=0;
+
+    if (idNamePair.likes) {
+        likeCount=idNamePair.likes.length;
+    }
+
+    if (idNamePair.dislikes) {
+        dislikeCount = idNamePair.dislikes.length;
+    }
 
     let modalJSX = ""
     if (store.isEditSongModalOpen()) {
@@ -111,6 +123,44 @@ function ListCard(props) {
         }
     }
 
+    function handleLike(event) {
+        if (!idNamePair.likes.includes(auth.user.userName)) {
+            idNamePair.likes.push(auth.user.userName);
+            setLike((prevLike)=>{return prevLike+1});
+            if (idNamePair.dislikes.includes(auth.user.userName)) {
+                setDislike((prevDislike)=>{return prevDislike-1});
+                let index = idNamePair.dislikes.indexOf(auth.user.userName);
+                idNamePair.dislikes.splice(index,1);
+            }
+        }
+        else {
+            setLike((prevLike)=>{return prevLike-1})
+            let index = idNamePair.likes.indexOf(auth.user.userName);
+            idNamePair.likes.splice(index,1);
+        }
+        store.updateListById(idNamePair);
+        event.stopPropagation();
+    }
+
+    function handleDislike(event) {
+        if (!idNamePair.dislikes.includes(auth.user.userName)) {
+            idNamePair.dislikes.push(auth.user.userName);
+            setDislike((prevDislike)=>{return prevDislike+1});
+            if (idNamePair.likes.includes(auth.user.userName)) {
+                setLike((prevLike)=>{return prevLike-1})
+                let index = idNamePair.likes.indexOf(auth.user.userName);
+                idNamePair.likes.splice(index,1);
+            }
+        }
+        else {
+            setDislike((prevDislike)=>{return prevDislike-1});
+            let index = idNamePair.dislikes.indexOf(auth.user.userName);
+            idNamePair.dislikes.splice(index,1);
+        }
+        store.updateListById(idNamePair);
+        event.stopPropagation();
+    }
+
     function handleCloseList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -168,6 +218,16 @@ function ListCard(props) {
     }
     function handleUpdateText(event) {
         setText(event.target.value);
+    }
+
+    let likeButton = <ThumbUpIcon style={{fontSize:'48pt'}} />;
+    let dislikeButton = <ThumbDownIcon style={{fontSize:'48pt'}} />;
+
+    if (idNamePair.likes.includes(auth.user.userName)) {
+        likeButton = <ThumbUpIcon style={{fontSize:'48pt', color:'blue'}} />;
+    }
+    else if (idNamePair.dislikes.includes(auth.user.userName)) {
+        dislikeButton = <ThumbDownIcon style={{fontSize:'48pt', color:'blue'}} />;
     }
 
     let selectClass = "unselected-list-card";
@@ -442,14 +502,14 @@ function ListCard(props) {
                             </Box>
                         </Box>
                         <Box sx={{ p: 1, display:'flex' }}>
-                        {idNamePair.published != "Nope" ? <IconButton aria-label='edit'>
-                                <ThumbUpIcon style={{fontSize:'48pt'}} />
+                        {idNamePair.published != "Nope" ? <IconButton onClick={handleLike}>
+                                {likeButton}
                             </IconButton> : null}
-                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{idNamePair.likes.length}</Typography> : null}
-                            {idNamePair.published != "Nope" ? <IconButton>
-                                <ThumbDownIcon style={{fontSize:'48pt'}} />
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{likeCount}</Typography> : null}
+                            {idNamePair.published != "Nope" ? <IconButton onClick={handleDislike}>
+                                {dislikeButton}
                             </IconButton> : null}
-                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{idNamePair.dislikes.length}</Typography> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
                         </Box>
                     </ListItem>
                 </AccordionSummary>
@@ -466,6 +526,7 @@ function ListCard(props) {
                                         key={'playlist-song-' + (index)}
                                         index={index}
                                         song={song}
+                                        published={idNamePair.published != "Nope"}
                                     />
                                 ))
                             }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import YouTube from 'react-youtube';
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
@@ -13,9 +13,14 @@ export default function YouTubePlayer() {
     const { store } = useContext(GlobalStoreContext);
     const [ytPlayer, setPlayer] = useState();
     const [songIndex, setSongIndex] = useState(0);
+    const [prevList, setPrevList] = useState(null);
     let playlist = [];
-    if (store.playerList)
+    if (store.playerList){
         playlist=store.getPlayerList();
+        // if (!prevList) {
+        //     setPrevList(playlist);
+        // }
+    }
     
     let currentSong = 0;
     const playerOptions = {
@@ -30,9 +35,31 @@ export default function YouTubePlayer() {
     let currentSongArtist="";
     
     if (store.playerList != null) {
-        currentSongArtist=store.playerList.songs[songIndex].artist;
-        currentSongTitle=store.playerList.songs[songIndex].title;
+        
+        // if (prevList != store.playerList) {
+        //     setSongIndex(0);
+        //     setPrevList((prevPrevList)=>{return playlist});
+        //     if (store.playerList.songs.length > 0) {
+        //         currentSongArtist=store.playerList.songs[0].artist;
+        //         currentSongTitle=store.playerList.songs[0].title;
+        //     }
+        // }
+        // else {
+        //     if (store.playerList.songs.length > 0) {
+        //         currentSongArtist=store.playerList.songs[songIndex].artist;
+        //         currentSongTitle=store.playerList.songs[songIndex].title;
+        //     }
+        // }
+        if (store.playerList.songs.length > 0) {
+            if ((store.playerList != prevList)) {
+                setSongIndex((prevIndex)=>{return 0});
+                setPrevList((prevPrevList)=>{return store.playerList});
+            }
+            currentSongArtist=store.playerList.songs[songIndex].artist;
+            currentSongTitle=store.playerList.songs[songIndex].title;
+        }
     }
+
 
     function loadAndPlayCurrentSong(player) {
         if (store.playerList && playlist.length!=0) {
