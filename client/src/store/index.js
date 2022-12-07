@@ -106,17 +106,17 @@ function GlobalStoreContextProvider(props) {
             }
             // CREATE A NEW LIST
             case GlobalStoreActionType.CREATE_NEW_LIST: {                
-                return setStore({
+                return setStore((prevStore) => ({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentList: store.currentList,
+                    idNamePairs: prevStore.idNamePairs,
+                    currentList: prevStore.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
-                    newListCounter: store.newListCounter + 1,
+                    newListCounter: prevStore.newListCounter + 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
-                })
+                }))
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
@@ -314,6 +314,26 @@ function GlobalStoreContextProvider(props) {
             );
             store.loadIdNamePairs();
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
+    store.duplicateList = async function () {
+        let newListName = store.currentList.name + store.newListCounter;
+        let newListSongs = store.currentList.songs;
+        const response = await api.createPlaylist(newListName, newListSongs, auth.user.email, auth.user.userName);
+        console.log("duplicateNewList response " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: newList
+            }
+            );
+            store.loadIdNamePairs();
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");

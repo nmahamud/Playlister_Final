@@ -11,7 +11,8 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 export default function YouTubePlayer() {
     const { store } = useContext(GlobalStoreContext);
-    const [ytPlayer, setPlayer] = useState(); 
+    const [ytPlayer, setPlayer] = useState();
+    const [songIndex, setSongIndex] = useState(0);
     let playlist = [];
     if (store.playerList)
         playlist=store.getPlayerList();
@@ -25,10 +26,17 @@ export default function YouTubePlayer() {
             autoplay: 0,
         },
     };
+    let currentSongTitle="";
+    let currentSongArtist="";
+    
+    if (store.playerList != null) {
+        currentSongArtist=store.playerList.songs[songIndex].artist;
+        currentSongTitle=store.playerList.songs[songIndex].title;
+    }
 
     function loadAndPlayCurrentSong(player) {
         if (store.playerList && playlist.length!=0) {
-            let song = playlist[currentSong].youTubeId;
+            let song = playlist[songIndex].youTubeId;
             player.loadVideoById(song);
             player.playVideo();
         }
@@ -49,16 +57,18 @@ export default function YouTubePlayer() {
     }
 
     function incSongButton() {
-        if (store.playerList && playlist.length!=0 && currentSong != playlist.length-1) {
+        if (store.playerList && playlist.length!=0 && songIndex < playlist.length-1) {
             currentSong++;
+            setSongIndex((prevIndex) => {return prevIndex+1});
             currentSong = currentSong % playlist.length;
         }
         loadAndPlayCurrentSong(ytPlayer);
     }
 
     function decSongButton() {
-        if (store.playerList && playlist.length!=0 && currentSong != 0) {
+        if (store.playerList && playlist.length!=0 && songIndex != 0) {
             currentSong--;
+            setSongIndex((prevIndex) => {return prevIndex-1});
             currentSong = currentSong % playlist.length;
         }
         loadAndPlayCurrentSong(ytPlayer);
@@ -108,7 +118,7 @@ export default function YouTubePlayer() {
             <Box>
                 <Box textAlign="center">
                     <YouTube
-                    videoId={playlist[currentSong].youTubeId}
+                    videoId={playlist[songIndex].youTubeId}
                     opts={playerOptions}
                     onReady={onPlayerReady}
                     onStateChange={onPlayerStateChange} />
@@ -116,9 +126,9 @@ export default function YouTubePlayer() {
                 </Box>
                 <Box>
                     <Typography sx={{fontSize:32}} variant='h2'>Playlist: {store.playerList.name} </Typography>
-                    <Typography sx={{fontSize:32}} variant='h2'>Song #: {currentSong} </Typography>
-                    <Typography sx={{fontSize:32}} variant='h2'>Title: {playlist[currentSong].title} </Typography>
-                    <Typography sx={{fontSize:32}} variant='h2'>Artist: {playlist[currentSong].artist} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Song #: {songIndex} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Title: {currentSongTitle} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Artist: {currentSongArtist} </Typography>
                 </Box>
                 <Box textAlign="center">
                     <IconButton onClick={decSongButton}>

@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Accordion, AccordionDetails, AccordionSummary, List } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, List, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -18,7 +18,8 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { textAlign } from '@mui/system';
 import EditToolbar from './EditToolbar';
-
+import { Button } from '@mui/material';
+import AuthContext from '../auth';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -29,10 +30,12 @@ import EditToolbar from './EditToolbar';
 */
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [expand, setExpand] = useState(false);
     const { idNamePair, selected } = props;
+    const [ publish, setPublish ] = useState(store.currentList != null);
     
     let thisList = false;
 
@@ -121,6 +124,19 @@ function ListCard(props) {
             store.closeCurrentList();
             setExpand(false);
         }
+    }
+
+    function handleDuplicate(event) {
+        console.log("Duping the list " + idNamePair._id);
+        if (!event.target.disabled) {
+            store.duplicateList();
+        }
+    }
+
+    function handlePublish(event) {
+        // setPublish(true);
+        store.currentList.published=new Date().toDateString();
+        store.updateCurrentList();
     }
 
     function handleToggleEdit(event) {
@@ -410,7 +426,7 @@ function ListCard(props) {
                     <ListItem
                     id={idNamePair._id}
                     key={idNamePair._id}
-                    sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+                    sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1, justifyContent:'space-between' }}
                     style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
                     button
                     // onClick={(event) => {
@@ -421,17 +437,19 @@ function ListCard(props) {
                             {idNamePair.name}
                             <Box sx={{ fontSize: 20 }}>
                                 By {idNamePair.userName}
+                                <br />
+                                {idNamePair.published != "Nope" ? idNamePair.published : null}
                             </Box>
                         </Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton aria-label='edit'>
+                        <Box sx={{ p: 1, display:'flex' }}>
+                        {idNamePair.published != "Nope" ? <IconButton aria-label='edit'>
                                 <ThumbUpIcon style={{fontSize:'48pt'}} />
-                            </IconButton>
-                        </Box>
-                      <Box sx={{ p: 1 }}>
-                            <IconButton>
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{idNamePair.likes.length}</Typography> : null}
+                            {idNamePair.published != "Nope" ? <IconButton>
                                 <ThumbDownIcon style={{fontSize:'48pt'}} />
-                            </IconButton>
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{idNamePair.dislikes.length}</Typography> : null}
                         </Box>
                     </ListItem>
                 </AccordionSummary>
@@ -451,12 +469,23 @@ function ListCard(props) {
                                     />
                                 ))
                             }
-                            <AddSongCard />
-                            <Box>
-                                <EditToolbar 
+                            {idNamePair.published != "Nope" ? null:<AddSongCard />}
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', p:1, m:1, bgcolor: 'background.paper'}}>
+                                {idNamePair.published != "Nope" ? null : <EditToolbar 
                                     handleToggleEdit={handleToggleEdit}
                                     handleDeleteList={handleDeleteList}
-                                />
+                                />}
+                                <Box>
+                                    {idNamePair.published != "Nope" ? null : <Button onClick={handlePublish} className='edit-right-button' variant="contained">
+                                        Publish
+                                    </Button> }
+                                    {(idNamePair.published != "Nope") && (auth.user.userName != idNamePair.userName)? null : <Button className='edit-right-button' onClick={handleDeleteList} variant="contained">
+                                        Delete
+                                    </Button>}
+                                    <Button onClick={handleDuplicate} className='edit-right-button' variant="contained">
+                                        Duplicate
+                                    </Button>
+                                </Box>
                             </Box>
                         </List>
                         { modalJSX }

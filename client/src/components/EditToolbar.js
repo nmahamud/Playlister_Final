@@ -52,15 +52,9 @@ function EditToolbar(props) {
                 variant="contained">
                     <RedoIcon />
             </Button>
-            <Button className='edit-right-button' variant="contained">
-                Publish
-            </Button>
-            <Button className='edit-right-button' onClick={handleDeleteList} variant="contained">
-                Delete
-            </Button>
-            <Button className='edit-right-button' variant="contained">
-                Duplicate
-            </Button>
+            {/* <Box sx={{display:'inline'}}> */}
+            {/* </Box> */}
+            
             {/* <Button 
                 disabled={!store.canClose()}
                 id='close-button'

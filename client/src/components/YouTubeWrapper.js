@@ -24,7 +24,7 @@ export default function YouTubeWrapper() {
     const handleComments = (event) => {
         setValue(true);
     };
-    if (!value) {
+    // if (!value) {
         return(
             <Box overflow="auto" sx={{ width: '100%'}}>
                 <Box>
@@ -35,29 +35,29 @@ export default function YouTubeWrapper() {
                         Comments
                     </Button>
                 </Box>
-                <Box>
+                <div style={ !value ? { display: "inline" } : { display: "none" }}>
                     <YouTubePlayer />
-                </Box>
-                <Box sx={{display:'none'}}><YouTubeComments /></Box>
+                </div>
+                <div style={ !value ? { display: "none" } : { display: "inline" }}><YouTubeComments /></div>
             </Box>
         );
-    }
-    else {
-        return(
-            <Box overflow="auto" sx={{ width: '100%' }}>
-                <Button variant="contained" onClick={handlePlayer}>
-                    Player
-                </Button>
-                <Button variant="contained" onClick={handleComments}>
-                    Comments
-                </Button>
-                <Box sx={{display:'none'}}>
-                    <YouTubePlayer />
-                </Box>
-                <Box sx={{height:'80%'}}>
-                    <YouTubeComments />
-                </Box>
-            </Box>
-        );
-    }
+    // }
+    // else {
+    //     return(
+    //         <Box overflow="auto" sx={{ width: '100%' }}>
+    //             <Button variant="contained" onClick={handlePlayer}>
+    //                 Player
+    //             </Button>
+    //             <Button variant="contained" onClick={handleComments}>
+    //                 Comments
+    //             </Button>
+    //             <Box sx={{display:'none'}}>
+    //                 <YouTubePlayer />
+    //             </Box>
+    //             <Box sx={{height:'80%'}}>
+    //                 <YouTubeComments />
+    //             </Box>
+    //         </Box>
+    //     );
+    // }
 }
