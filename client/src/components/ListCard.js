@@ -98,14 +98,14 @@ function ListCard(props) {
                 // event.stopPropagation();
             }
             else {
-                // if (store.isCurrentListThis(list)) {
+                if (store.isCurrentListThis(list)) {
                     store.closeCurrentList();
                     setExpand(false);
-                // }
-                // else {
-                //     store.closeCurrentList();
-                //     setExpand(true);
-                // }
+                }
+                else {
+                    store.closeCurrentList();
+                    store.setCurrentList(list);
+                }
             }
             event.stopPropagation();
         }
