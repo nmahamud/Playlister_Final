@@ -71,7 +71,12 @@ body {
 
 #edit-toolbar {
   background-color: transparent;
-  transform: translate(41%, 0%);
+  /* text-align: left; */
+  /* transform: translate(41%, 0%); */
+}
+
+.edit-right-button {
+  text-align: right;
 }
 
 .playlister-button,

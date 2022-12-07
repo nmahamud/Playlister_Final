@@ -11,9 +11,24 @@ import TextField from '@mui/material/TextField';
 export default function YouTubeComments() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
+    const [value, setValue] = useState("");
+    const handleChange = e => {
+        console.log(`Text: ${e.target.value}`);
+        setValue(e.target.value);
+    };
+    function handleKeyPress(e) {
+        if (e.code === "Enter") {
+            let newCommentText = e.target.value; //get the new comment
+            let newComment = {user: user, comment: newCommentText};
+            setValue("");
+            store.playerList.comments.push(newComment);
+            store.updatePlayerList();
+        };
+    }
+
     let comments="";
-    if (store.currentList) {
-        comments=store.currentList.comments;
+    if (store.playerList) {
+        comments=store.playerList.comments;
     }
     let user="";
     if (auth.user) {
@@ -39,7 +54,7 @@ export default function YouTubeComments() {
                 }
             </List>
             <Box textAlign='center'>
-                <TextField fullWidth label='Comment here!'></TextField>
+                <TextField value={value} onKeyPress={handleKeyPress} onChange={handleChange} fullWidth label='Comment here!'></TextField>
             </Box>
         </div>
         }
@@ -49,7 +64,7 @@ export default function YouTubeComments() {
     
     }
     return (
-        <Box id ='song-cards-container' sx = {{overflowY:'auto', maxHeight: 250}}>
+        <Box id ='song-cards-container' sx = {{overflowY:'auto', maxHeight:800}}>
             {list}
         </Box>
     );

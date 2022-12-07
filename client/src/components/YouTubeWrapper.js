@@ -26,7 +26,7 @@ export default function YouTubeWrapper() {
     };
     if (!value) {
         return(
-            <Box sx={{ width: '100%' }}>
+            <Box overflow="auto" sx={{ width: '100%'}}>
                 <Box>
                     <Button variant="contained" onClick={handlePlayer}>
                         Player
@@ -38,19 +38,23 @@ export default function YouTubeWrapper() {
                 <Box>
                     <YouTubePlayer />
                 </Box>
+                <Box sx={{display:'none'}}><YouTubeComments /></Box>
             </Box>
         );
     }
     else {
         return(
-            <Box sx={{ width: '100%' }}>
+            <Box overflow="auto" sx={{ width: '100%' }}>
                 <Button variant="contained" onClick={handlePlayer}>
                     Player
                 </Button>
                 <Button variant="contained" onClick={handleComments}>
                     Comments
                 </Button>
-                <Box>
+                <Box sx={{display:'none'}}>
+                    <YouTubePlayer />
+                </Box>
+                <Box sx={{height:'80%'}}>
                     <YouTubeComments />
                 </Box>
             </Box>

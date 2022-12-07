@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
 import api from './store-request-api'
@@ -28,6 +28,7 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
+    SET_PLAYER_LIST: "SET_PLAYER_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
@@ -58,7 +59,8 @@ function GlobalStoreContextProvider(props) {
         newListCounter: 0,
         listNameActive: false,
         listIdMarkedForDeletion: null,
-        listMarkedForDeletion: null
+        listMarkedForDeletion: null,
+        playerList: null
     });
     const history = useHistory();
 
@@ -89,17 +91,18 @@ function GlobalStoreContextProvider(props) {
             }
             // STOP EDITING THE CURRENT LIST
             case GlobalStoreActionType.CLOSE_CURRENT_LIST: {
-                return setStore({
+                return setStore((prevStore) => ({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: prevStore.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
-                    newListCounter: store.newListCounter,
+                    newListCounter: prevStore.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
-                })
+                    listMarkedForDeletion: null,
+                    playerList: prevStore.playerList
+                }))
             }
             // CREATE A NEW LIST
             case GlobalStoreActionType.CREATE_NEW_LIST: {                
@@ -145,17 +148,33 @@ function GlobalStoreContextProvider(props) {
             }
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
-                return setStore({
+                return setStore((prevStore) => ({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: prevStore.idNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
-                    newListCounter: store.newListCounter,
+                    newListCounter: prevStore.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
-                });
+                    listMarkedForDeletion: null,
+                    playerList: prevStore.playerList
+                }));
+            }
+            // Update the playerlist
+            case GlobalStoreActionType.SET_PLAYER_LIST: {
+                return setStore((prevStore) => ({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: prevStore.idNamePairs,
+                    currentList: prevStore.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: prevStore.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    playerList: payload
+                }));
             }
             // START EDITING A LIST NAME
             case GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE: {
@@ -392,6 +411,9 @@ function GlobalStoreContextProvider(props) {
     store.getCurrentList = () => {
         return store.currentList.songs;
     }
+    store.getPlayerList = () => {
+        return store.playerList.songs;
+    }
 
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
@@ -400,6 +422,14 @@ function GlobalStoreContextProvider(props) {
     store.setCurrentList = function (list) {
         storeReducer({
             type: GlobalStoreActionType.SET_CURRENT_LIST,
+            payload: list
+        });
+        // this.forceUpdate();
+    }
+
+    store.setPlayerList = function (list) {
+        storeReducer({
+            type: GlobalStoreActionType.SET_PLAYER_LIST,
             payload: list
         });
     }
@@ -512,6 +542,20 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateCurrentList();
     }
+
+    store.updatePlayerList = function() {
+        async function asyncUpdatePlayerList() {
+            const response = await api.updatePlaylistById(store.playerList._id, store.playerList);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.SET_PLAYER_LIST,
+                    payload: store.playerList
+                });
+            }
+        }
+        asyncUpdatePlayerList();
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }

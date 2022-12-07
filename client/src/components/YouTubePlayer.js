@@ -3,7 +3,7 @@ import YouTube from 'react-youtube';
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import Box from '@mui/material/Box'
 import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -13,8 +13,8 @@ export default function YouTubePlayer() {
     const { store } = useContext(GlobalStoreContext);
     const [ytPlayer, setPlayer] = useState(); 
     let playlist = [];
-    if (store.currentList)
-        playlist=store.getCurrentList();
+    if (store.playerList)
+        playlist=store.getPlayerList();
     
     let currentSong = 0;
     const playerOptions = {
@@ -27,7 +27,7 @@ export default function YouTubePlayer() {
     };
 
     function loadAndPlayCurrentSong(player) {
-        if (store.currentList && playlist.length!=0) {
+        if (store.playerList && playlist.length!=0) {
             let song = playlist[currentSong].youTubeId;
             player.loadVideoById(song);
             player.playVideo();
@@ -35,21 +35,21 @@ export default function YouTubePlayer() {
     }
 
     function incSong() {
-        if (store.currentList && playlist.length!=0) {
+        if (store.playerList && playlist.length!=0) {
             currentSong++;
             currentSong = currentSong % playlist.length;
         }
     }
 
     function decSong() {
-        if (store.currentList && playlist.length!=0 && currentSong != 0) {
+        if (store.playerList && playlist.length!=0 && currentSong != 0) {
             currentSong--;
             currentSong = currentSong % playlist.length;
         }
     }
 
     function incSongButton() {
-        if (store.currentList && playlist.length!=0) {
+        if (store.playerList && playlist.length!=0 && currentSong != playlist.length-1) {
             currentSong++;
             currentSong = currentSong % playlist.length;
         }
@@ -57,7 +57,7 @@ export default function YouTubePlayer() {
     }
 
     function decSongButton() {
-        if (store.currentList && playlist.length!=0 && currentSong != 0) {
+        if (store.playerList && playlist.length!=0 && currentSong != 0) {
             currentSong--;
             currentSong = currentSong % playlist.length;
         }
@@ -103,26 +103,37 @@ export default function YouTubePlayer() {
             player.playVideo();
         }
     }
-    if (store.currentList && playlist.length!=0) {
+    if (store.playerList && playlist.length!=0) {
         return (
-            <Box textAlign="center">
-                <YouTube
-                videoId={playlist[currentSong].youTubeId}
-                opts={playerOptions}
-                onReady={onPlayerReady}
-                onStateChange={onPlayerStateChange} />
-                <IconButton onClick={decSongButton}>
-                    <SkipPreviousIcon />
-                </IconButton>
-                <IconButton onClick={pauseSong}>
-                    <StopIcon />
-                </IconButton>
-                <IconButton onClick={playSong}>
-                    <PlayArrowIcon />
-                </IconButton>
-                <IconButton onClick={incSongButton}>
-                    <SkipNextIcon />
-                </IconButton>
+            <Box>
+                <Box textAlign="center">
+                    <YouTube
+                    videoId={playlist[currentSong].youTubeId}
+                    opts={playerOptions}
+                    onReady={onPlayerReady}
+                    onStateChange={onPlayerStateChange} />
+                    <Typography variant='h3'>Now Playing: </Typography>
+                </Box>
+                <Box>
+                    <Typography sx={{fontSize:32}} variant='h2'>Playlist: {store.playerList.name} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Song #: {currentSong} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Title: {playlist[currentSong].title} </Typography>
+                    <Typography sx={{fontSize:32}} variant='h2'>Artist: {playlist[currentSong].artist} </Typography>
+                </Box>
+                <Box textAlign="center">
+                    <IconButton onClick={decSongButton}>
+                        <SkipPreviousIcon />
+                    </IconButton>
+                    <IconButton onClick={pauseSong}>
+                        <StopIcon />
+                    </IconButton>
+                    <IconButton onClick={playSong}>
+                        <PlayArrowIcon />
+                    </IconButton>
+                    <IconButton onClick={incSongButton}>
+                        <SkipNextIcon />
+                    </IconButton>
+                </Box>
             </Box>
             );
         
@@ -133,16 +144,16 @@ export default function YouTubePlayer() {
                 opts={playerOptions}
                 onReady={onPlayerReady}
                 onStateChange={onPlayerStateChange} /> */}
-            <IconButton>
+            <IconButton disabled>
                 <SkipPreviousIcon />
             </IconButton>
-            <IconButton>
+            <IconButton disabled>
                 <StopIcon />
             </IconButton>
-            <IconButton>
+            <IconButton disabled>
                 <PlayArrowIcon />
             </IconButton>
-            <IconButton>
+            <IconButton disabled>
                 <SkipNextIcon />
             </IconButton>
         </Box>

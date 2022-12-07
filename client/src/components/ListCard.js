@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,6 +17,7 @@ import AddSongCard from './AddSongCard';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { textAlign } from '@mui/system';
+import EditToolbar from './EditToolbar';
 
 
 /*
@@ -32,8 +33,10 @@ function ListCard(props) {
     const [text, setText] = useState("");
     const [expand, setExpand] = useState(false);
     const { idNamePair, selected } = props;
+    
+    let thisList = false;
 
-    let modalJSX = "";
+    let modalJSX = ""
     if (store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;
     }
@@ -46,20 +49,32 @@ function ListCard(props) {
         setExpand(bool);
     }
 
+    useEffect(() => {
+        console.log(store.currentList);
+    })
+
     function handleLoadList(event, id, list) {
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
+        if (event.detail==2) {
+            console.log("double clicked");
+            handleToggleEdit(event);
+        }
+        else {
+            console.log("handleLoadList for " + id);
+            if (!event.target.disabled) {
+                let _id = event.target.id;
+                if (_id.indexOf('list-card-text-') >= 0)
+                    _id = ("" + _id).substring("list-card-text-".length);
 
-            console.log("load " + event.target.id);
+                console.log("load " + event.target.id);
 
-            // CHANGE THE CURRENT LIST
-            if (!store.isCurrentListThis(list))
-                setExpand(false);
-            store.closeCurrentList(list);
-            store.setCurrentList(list);
+                // CHANGE THE CURRENT LIST
+                if (!store.isCurrentListThis(list)) {
+                    setExpand(false);
+                    store.closeCurrentList();
+                }
+                // store.setCurrentList(list);
+                store.setPlayerList(list);
+            }
         }
     }
 
@@ -74,15 +89,22 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             if (!expand) {
-                store.closeCurrentList(list);
+                store.closeCurrentList();
                 store.setCurrentList(list);
                 setExpand(true);
+                // event.stopPropagation();
             }
             else {
-                store.closeCurrentList();
-                setExpand(false);
+                // if (store.isCurrentListThis(list)) {
+                    store.closeCurrentList();
+                    setExpand(false);
+                // }
+                // else {
+                //     store.closeCurrentList();
+                //     setExpand(true);
+                // }
             }
-            
+            event.stopPropagation();
         }
     }
 
@@ -114,11 +136,11 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
-    async function handleDeleteList(event, id) {
+    async function handleDeleteList(event) {
         event.stopPropagation();
         let _id = event.target.id;
         _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
+        store.markListForDeletion(idNamePair._id);
     }
 
     function handleKeyPress(event) {
@@ -166,7 +188,6 @@ function ListCard(props) {
 //                             <ThumbUpIcon style={{fontSize:'48pt'}} />
 //                         </IconButton>
 //                     </Box>
-
 //                     <Box sx={{ p: 1 }}>
 //                         <IconButton>
 //                             <ThumbDownIcon style={{fontSize:'48pt'}} />
@@ -219,7 +240,6 @@ function ListCard(props) {
 //                             <ThumbUpIcon style={{fontSize:'48pt'}} />
 //                         </IconButton>
 //                     </Box>
-
 //                     <Box sx={{ p: 1 }}>
 //                         <IconButton>
 //                             <ThumbDownIcon style={{fontSize:'48pt'}} />
@@ -238,8 +258,8 @@ function ListCard(props) {
 //                         </IconButton>
 //                     </Box>
 //                     <Box sx={{ p: 1, textAlign:"right"}}>
-//                         <IconButton onClick={(event) => {
-//                                 handleOpenList(event, idNamePair._id, idNamePair)
+//                         <IconButton onClick={(event) => { event.stopPropagation();
+//                                 handleOpenList(event, idNamePair._id, idNamePair);
 //                                }} aria-label='delete'>
 //                             <KeyboardDoubleArrowDownIcon style={{fontSize:'48pt'}} />
 //                         </IconButton>
@@ -271,7 +291,6 @@ function ListCard(props) {
 //                             <ThumbUpIcon style={{fontSize:'48pt'}} />
 //                         </IconButton>
 //                     </Box>
-
 //                     <Box sx={{ p: 1 }}>
 //                         <IconButton>
 //                             <ThumbDownIcon style={{fontSize:'48pt'}} />
@@ -344,7 +363,6 @@ function ListCard(props) {
 //                             <ThumbUpIcon style={{fontSize:'48pt'}} />
 //                         </IconButton>
 //                     {/* </Box> */}
-
 //                     {/* <Box sx={{ p: 1 }}> */}
 //                         <IconButton>
 //                             <ThumbDownIcon style={{fontSize:'48pt'}} />
@@ -406,25 +424,13 @@ function ListCard(props) {
                             </Box>
                         </Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                            <IconButton aria-label='edit'>
                                 <ThumbUpIcon style={{fontSize:'48pt'}} />
                             </IconButton>
                         </Box>
                       <Box sx={{ p: 1 }}>
                             <IconButton>
                                 <ThumbDownIcon style={{fontSize:'48pt'}} />
-                            </IconButton>
-                        </Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                                <EditIcon style={{fontSize:'48pt'}} />
-                            </IconButton>
-                        </Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleDeleteList(event, idNamePair._id)
-                                }} aria-label='delete'>
-                                <DeleteIcon style={{fontSize:'48pt'}} />
                             </IconButton>
                         </Box>
                     </ListItem>
@@ -446,6 +452,12 @@ function ListCard(props) {
                                 ))
                             }
                             <AddSongCard />
+                            <Box>
+                                <EditToolbar 
+                                    handleToggleEdit={handleToggleEdit}
+                                    handleDeleteList={handleDeleteList}
+                                />
+                            </Box>
                         </List>
                         { modalJSX }
                     </Box>

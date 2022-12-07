@@ -66,7 +66,7 @@ const HomeScreen = () => {
                     <MUIDeleteModal />
                 </Box>
             </Box>
-            <Box className='split right'>
+            <Box className='split right' sx={{height:'85%'}}>
                     <YouTubeWrapper />
             </Box>
         </div>)

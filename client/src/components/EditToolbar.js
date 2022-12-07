@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import CloseIcon from '@mui/icons-material/HighlightOff';
+import { Box } from '@mui/material';
 
 /*
     This toolbar is a functional React component that
@@ -12,8 +13,9 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
     
     @author McKilla Gorilla
 */
-function EditToolbar() {
+function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { handleToggleEdit, handleDeleteList } = props;
 
     function handleAddNewSong() {
         store.addNewSong();
@@ -29,13 +31,13 @@ function EditToolbar() {
     }
     return (
         <div id="edit-toolbar">
-            <Button
+            {/* <Button
                 disabled={!store.canAddNewSong()}
                 id='add-song-button'
                 onClick={handleAddNewSong}
                 variant="contained">
                 <AddIcon />
-            </Button>
+            </Button> */}
             <Button 
                 disabled={!store.canUndo()}
                 id='undo-button'
@@ -50,13 +52,22 @@ function EditToolbar() {
                 variant="contained">
                     <RedoIcon />
             </Button>
-            <Button 
+            <Button className='edit-right-button' variant="contained">
+                Publish
+            </Button>
+            <Button className='edit-right-button' onClick={handleDeleteList} variant="contained">
+                Delete
+            </Button>
+            <Button className='edit-right-button' variant="contained">
+                Duplicate
+            </Button>
+            {/* <Button 
                 disabled={!store.canClose()}
                 id='close-button'
                 onClick={handleClose}
                 variant="contained">
                     <CloseIcon />
-            </Button>
+            </Button> */}
         </div>
     )
 }
