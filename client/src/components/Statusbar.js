@@ -34,19 +34,22 @@ function Statusbar() {
     //     </div>
     // );
     // }
-
-    text = 
-    <Box textAlign='center' id="playlister-statusbar">
-        <Fab 
-        color="primary" 
-        aria-label="add"
-        id="add-list-button"
-        onClick={handleCreateNewList}
-        >
-            <AddIcon />
-        </Fab>
-        Your Lists
-    </Box>;
+    if (store) {
+        if (store.viewList == "Home") {
+            text = 
+            <Box textAlign='center' id="playlister-statusbar">
+                <Fab 
+                color="primary" 
+                aria-label="add"
+                id="add-list-button"
+                onClick={handleCreateNewList}
+                >
+                    <AddIcon />
+                </Fab>
+                Your Lists
+            </Box>;
+        }
+    }
 
     return text;
 }

@@ -23,24 +23,88 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
+    function isPublished(playList) {
+        return playList.published != "Nope";
+    }
+
     function handleCreateNewList() {
         store.createNewList();
     }
     let listCard = "";
     if (store) {
-        listCard = 
-            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                    />
-                ))
-                
+        if (store.viewList=="Home") {
+            let pubList = store.idNamePairs;
+            switch (store.sortNum) {
+                case (2): {
+                    pubList.sort(function(a,b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                    break;
+                }
+                case (0): {
+                    pubList.sort((a,b) => (a.createdAt < b.createdAt) ? -1 : 1);
+                    break;
+                }
+                case (1): {
+                    pubList.sort((a,b) => (a.updatedAt < b.updatedAt) ? 1 : -1);
+                    break;
+                }
             }
-            </List>;
+            listCard = 
+                <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
+                {
+                    pubList.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                    
+                }
+                </List>;
+        }
+        else {
+            let pubList = store.idNamePairs.filter(isPublished);
+            switch (store.sortNum) {
+                case (2): {
+                    pubList.sort(function(a,b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                    break;
+                }
+                case (3): {
+                    pubList.sort((a,b) => (a.likes.length < b.likes.length) ? 1 : -1);
+                    break;
+                }
+                case (4): {
+                    pubList.sort((a,b) => (a.dislikes.length < b.dislikes.length) ? 1 : -1);
+                    break;
+                }
+                case (5): {
+                    pubList.sort((a,b) => (a.listens < b.listens) ? 1 : -1);
+                    break;
+                }
+                case (6): {
+                    pubList.sort((a,b) => (new Date(a.published) < new Date(b.published)) ? 1 : -1);
+                    break;
+                }
+            }
+            // pubList.map((pair) => (console.log(pair)))
+            listCard = 
+                <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
+                {
+                    pubList.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                    
+                }
+                </List>;
+        }
     }
     return (
         <div id="playlist-selector">

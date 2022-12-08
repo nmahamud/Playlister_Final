@@ -21,7 +21,8 @@ export default function YouTubeComments() {
             let newCommentText = e.target.value; //get the new comment
             let newComment = {user: user, comment: newCommentText};
             setValue("");
-            store.playerList.comments.push(newComment);
+            if (newCommentText != "")
+                store.playerList.comments.push(newComment);
             store.updatePlayerList();
         };
     }

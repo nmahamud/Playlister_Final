@@ -68,10 +68,14 @@ function ListCard(props) {
         console.log(store.currentList);
     })
 
+    // document.querySelector(".holdsAccordion").addEventListener("click")
+
     function handleLoadList(event, id, list) {
         if (event.detail==2) {
-            console.log("double clicked");
-            handleToggleEdit(event);
+            if (idNamePair.published == "Nope") {
+                console.log("double clicked");
+                handleToggleEdit(event);
+            }
         }
         else {
             console.log("handleLoadList for " + id);
@@ -139,7 +143,11 @@ function ListCard(props) {
             idNamePair.likes.splice(index,1);
         }
         store.updateListById(idNamePair);
+        // store.changeSort(store.storeNum);
         event.stopPropagation();
+        event.preventDefault();
+        // store.loadIdNamePairs();
+        
     }
 
     function handleDislike(event) {
@@ -157,8 +165,12 @@ function ListCard(props) {
             let index = idNamePair.dislikes.indexOf(auth.user.userName);
             idNamePair.dislikes.splice(index,1);
         }
+        // event.stopPropagation();
         store.updateListById(idNamePair);
+        // store.changeSort(store.storeNum);
         event.stopPropagation();
+        event.preventDefault();
+        // store.loadIdNamePairs();
     }
 
     function handleCloseList(event, id) {
@@ -185,7 +197,7 @@ function ListCard(props) {
 
     function handlePublish(event) {
         // setPublish(true);
-        store.currentList.published=new Date().toDateString();
+        store.currentList.published=new Date();
         store.updateCurrentList();
     }
 
@@ -212,7 +224,8 @@ function ListCard(props) {
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
+            if (text != "")
+                store.changeListName(id, text);
             toggleEdit();
         }
     }
@@ -224,10 +237,10 @@ function ListCard(props) {
     let dislikeButton = <ThumbDownIcon style={{fontSize:'48pt'}} />;
 
     if (idNamePair.likes.includes(auth.user.userName)) {
-        likeButton = <ThumbUpIcon style={{fontSize:'48pt', color:'blue'}} />;
+        likeButton = <ThumbUpIcon style={{fontSize:'48pt', color:'#42a5f5'}} />;
     }
     else if (idNamePair.dislikes.includes(auth.user.userName)) {
-        dislikeButton = <ThumbDownIcon style={{fontSize:'48pt', color:'blue'}} />;
+        dislikeButton = <ThumbDownIcon style={{fontSize:'48pt', color:'#42a5f5'}} />;
     }
 
     let selectClass = "unselected-list-card";
@@ -498,7 +511,7 @@ function ListCard(props) {
                             <Box sx={{ fontSize: 20 }}>
                                 By {idNamePair.userName}
                                 <br />
-                                {idNamePair.published != "Nope" ? idNamePair.published : null}
+                                {idNamePair.published != "Nope" ? new Date(idNamePair.published).toDateString() : null}
                             </Box>
                         </Box>
                         <Box sx={{ p: 1, display:'flex' }}>
