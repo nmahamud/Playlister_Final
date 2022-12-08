@@ -15,6 +15,7 @@ import AddSongCard from './AddSongCard';
 import EditToolbar from './EditToolbar';
 import { Button } from '@mui/material';
 import AuthContext from '../auth';
+import Modal from '@mui/material/Modal';
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -34,6 +35,20 @@ function ListCard(props) {
     const [ like, setLike ] = useState(0);
     const [ dislike, setDislike ] = useState(0);
     const [ listen , setListen ] = useState(0);
+    const [ badListName, setBadListName ] = useState(false);
+    
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        height: 200,
+        width: 400,
+        border: '5px solid yellow',
+        fontSize: "20px",
+        p: 4
+    };
     
     let thisList = false;
     let likeCount=0;
@@ -63,6 +78,10 @@ function ListCard(props) {
     useEffect(() => {
         console.log(store.currentList);
     })
+
+    function handleCloseModal(event) {
+        setBadListName((prevname) => {return false});
+    }
 
     // document.querySelector(".holdsAccordion").addEventListener("click")
 
@@ -254,12 +273,46 @@ function ListCard(props) {
 
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            let id = event.target.id.substring("list-".length);
-            if (text != "")
-                store.changeListName(id, text);
-            toggleEdit();
+            let notSame = true;
+            store.idNamePairs.forEach(function(playlist) {
+                if (playlist.name == text) {
+                    notSame = false;
+                }
+            });
+            if (notSame) {
+                let id = event.target.id.substring("list-".length);
+                if (text != "")
+                    store.changeListName(id, text);
+                toggleEdit();
+            }
+            else {
+                setBadListName((prevName) => {return true});
+            }
         }
     }
+
+
+    let badListNameModal = (
+        <Modal
+        open={badListName}
+        style={style}>
+            <Box>
+                <div className="modal-dialog">
+                    <header className="dialog-header">
+                        Cannot use already used List Name.
+                    </header>
+                <div id="confirm-cancel-container">
+                    <button
+                        id="dialog-no-button"
+                        className="modal-button"
+                        onClick={handleCloseModal}
+                    >Close</button>
+                </div>
+            </div>
+            </Box>
+        </Modal>);
+
+
     function handleUpdateText(event) {
         setText(event.target.value);
     }
@@ -467,7 +520,10 @@ function ListCard(props) {
             />
     }
     return (
-        cardElement
+        <>
+        {cardElement}
+        {badListNameModal}
+        </>
     );
 }
 
