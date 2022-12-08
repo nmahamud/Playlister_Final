@@ -2,7 +2,6 @@ import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth';
 import List from '@mui/material/List';
-import ListCard from './ListCard.js';
 import CommentCard from './CommentCard';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';

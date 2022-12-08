@@ -6,20 +6,15 @@ import { GlobalStoreContext } from '../store'
 import EditToolbar from './EditToolbar'
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
-import MenuIcon from '@mui/icons-material/Menu';
 import TextField from '@mui/material/TextField';
-import { Grid } from '@mui/material';
-import Select from '@mui/material/Select';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -134,7 +129,8 @@ export default function AppBanner() {
         if (e.code === "Enter") {
             let newSearch = e.target.value;
             setSearch((prevSearch) => {return ""});
-            store.changeSearch(newSearch);
+            if (newSearch != "")
+                store.changeSearch(newSearch);
         }
     }
     
@@ -167,7 +163,7 @@ export default function AppBanner() {
                     <PersonIcon fontSize='large'/>
                 </IconButton>
             </Box>
-            <TextField sx={{width:400}} label='Search' variant='outlined' value={search} />
+            <TextField sx={{width:400}} label='Search' variant='outlined' value={search} onKeyPress={handleKeyPress} onChange={handleSearch} />
             <Box sx={{display:'flex'}}>
                 <Typography sx={{fontSize:45}} variant='h2'>Sort By:</Typography>
                 <TextField
