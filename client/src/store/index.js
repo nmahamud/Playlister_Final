@@ -446,6 +446,24 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
+    store.loadIdNamePairsPublic = function () {
+        async function asyncLoadIdNamePairsPublic() {
+            const response = await api.getPlaylistPairsPublic();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadIdNamePairsPublic();
+    }
+
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
@@ -543,7 +561,7 @@ function GlobalStoreContextProvider(props) {
 
     store.updateListById = function (list) {
         async function asyncUpdateById(list) {
-            let response = await api.updatePlaylistById(list._id, list);
+            let response = await api.updatePlaylistByIdPublic(list._id, list);
             if (response.data.success) {
                 console.log(response.data);
                 let index = 0
@@ -698,7 +716,7 @@ function GlobalStoreContextProvider(props) {
 
     store.updatePlayerList = function() {
         async function asyncUpdatePlayerList() {
-            const response = await api.updatePlaylistById(store.playerList._id, store.playerList);
+            const response = await api.updatePlaylistByIdPublic(store.playerList._id, store.playerList);
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_PLAYER_LIST,

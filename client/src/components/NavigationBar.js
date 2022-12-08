@@ -108,17 +108,20 @@ export default function AppBanner() {
         if (auth.user.userName != null) {
             store.changeView("Home");
             setMenu((prevMenu) => {return "Home"});
+            store.loadIdNamePairs();
         }
     }
 
     function handleGroupMenu(event) {
         store.changeView("Group");
         setMenu((prevMenu) => {return "Group"});
+        store.loadIdNamePairsPublic();
     }
 
     function handlePersonMenu(event) {
         store.changeView("Person");
         setMenu((prevMenu) => {return "Person"})
+        store.loadIdNamePairsPublic();
     }
 
     function handleSearch(event) {
