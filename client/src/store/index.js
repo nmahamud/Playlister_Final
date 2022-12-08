@@ -93,6 +93,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList: prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -128,6 +129,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -145,6 +147,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -162,6 +165,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
                     listMarkedForDeletion: payload.playlist,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -215,6 +219,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: true,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -232,6 +237,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -248,6 +254,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -264,6 +271,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList:prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -280,6 +288,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: prevStore.listNameActive,
                     listIdMarkedForDeletion: prevStore.listIdMarkedForDeletion,
                     listMarkedForDeletion: prevStore.listMarkedForDeletion,
+                    playerList: prevStore.playerList,
                     sortNum: payload,
                     viewList: prevStore.viewList,
                     searchInput: prevStore.searchInput
@@ -296,6 +305,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: prevStore.listNameActive,
                     listIdMarkedForDeletion: prevStore.listIdMarkedForDeletion,
                     listMarkedForDeletion: prevStore.listMarkedForDeletion,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList: payload,
                     searchInput: prevStore.searchInput
@@ -312,6 +322,7 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: prevStore.listNameActive,
                     listIdMarkedForDeletion: prevStore.listIdMarkedForDeletion,
                     listMarkedForDeletion: prevStore.listMarkedForDeletion,
+                    playerList: prevStore.playerList,
                     sortNum: prevStore.sortNum,
                     viewList: prevStore.viewList,
                     searchInput: payload

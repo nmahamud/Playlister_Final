@@ -309,6 +309,7 @@ updatePlaylistPublic = async (req, res) => {
                     list.published = body.playlist.published;
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;
+                    list.listens = body.playlist.listens;
                     list
                         .save()
                         .then(() => {

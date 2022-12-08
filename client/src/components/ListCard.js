@@ -87,8 +87,39 @@ function ListCard(props) {
                     setExpand(false);
                     store.closeCurrentList();
                 }
+                // if (store.playerList != idNamePair) {
+                //     // setListen((prevListen)=>{return prevListen+1});
+                //     if (store.playerList != null) {
+                //         idNamePair.listens = idNamePair.listens + 1;
+                //         store.updatePlayerList();
+                //     }
+                //     else {
+                //         store.setPlayerList(list);
+                //         idNamePair.listens = idNamePair.listens + 1;
+                //         store.updateListById(list);
+                //     }
+                // }
+                // else if (store.playerList != null) {
+                //     store.setPlayerList(list);
+                // }
+                // else {
+                //     store.setPlayerList(list);
+                //     idNamePair.listens = idNamePair+1;
+                //     store.updateListById(list);
+                // }
                 // store.setCurrentList(list);
-                store.setPlayerList(list);
+                if (store.playerList != null) {
+                    if (store.playerList != idNamePair) { 
+                        idNamePair.listens = idNamePair.listens+1;
+                        store.setPlayerList(list);
+                        store.updateListById(list);
+                    }
+                }
+                else {
+                    store.setPlayerList(list);
+                    idNamePair.listens = idNamePair.listens+1;
+                    store.updateListById(list);
+                }
             }
         }
     }
@@ -275,6 +306,7 @@ function ListCard(props) {
                             </IconButton> : null}
                             {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
                         </Box>
+                        {idNamePair.published != "Nope" ? <Typography variant='h2'>Listens:{idNamePair.listens}</Typography> : null}
                     </ListItem>
         ;
     }
@@ -299,7 +331,7 @@ function ListCard(props) {
                             </Box>
                         </Box>
                         <Box sx={{ p: 1, display:'flex' }}>
-                        {idNamePair.published != "Nope" ? <IconButton onClick={handleLike}>
+                            {idNamePair.published != "Nope" ? <IconButton onClick={handleLike}>
                                 {likeButton}
                             </IconButton> : null}
                             {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{likeCount}</Typography> : null}
@@ -308,6 +340,7 @@ function ListCard(props) {
                             </IconButton> : null}
                             {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
                         </Box>
+                        {idNamePair.published != "Nope" ? <Typography variant='h2'>Listens: {idNamePair.listens}</Typography> : null}
                     </ListItem>
         ;
     }
