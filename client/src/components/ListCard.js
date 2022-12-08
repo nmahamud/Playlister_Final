@@ -33,6 +33,7 @@ function ListCard(props) {
     const [ publish, setPublish ] = useState(store.currentList != null);
     const [ like, setLike ] = useState(0);
     const [ dislike, setDislike ] = useState(0);
+    const [ listen , setListen ] = useState(0);
     
     let thisList = false;
     let likeCount=0;
@@ -242,6 +243,75 @@ function ListCard(props) {
         dislikeButton = <ThumbDownIcon style={{fontSize:'48pt', color:'#42a5f5'}} />;
     }
 
+    let itemForAccordianSummary = "";
+
+    if (idNamePair!=store.playerList) {
+        itemForAccordianSummary =
+        <ListItem
+                    id={idNamePair._id}
+                    key={idNamePair._id}
+                    sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1, justifyContent:'space-between' }}
+                    style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt'}}
+                    button
+                    // onClick={(event) => {
+                    //     handleLoadList(event, idNamePair._id)
+                    // }}
+                    >
+                        <Box sx={{ p:1, fontSize: 30 }}>
+                            {idNamePair.name}
+                            <Box sx={{ fontSize: 20 }}>
+                                By {idNamePair.userName}
+                                <br />
+                                {idNamePair.published != "Nope" ? new Date(idNamePair.published).toDateString() : null}
+                            </Box>
+                        </Box>
+                        <Box sx={{ p: 1, display:'flex' }}>
+                        {idNamePair.published != "Nope" ? <IconButton onClick={handleLike}>
+                                {likeButton}
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{likeCount}</Typography> : null}
+                            {idNamePair.published != "Nope" ? <IconButton onClick={handleDislike}>
+                                {dislikeButton}
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
+                        </Box>
+                    </ListItem>
+        ;
+    }
+    else {
+        itemForAccordianSummary =
+        <ListItem
+                    id={idNamePair._id}
+                    key={idNamePair._id}
+                    sx={{borderRadius:"25px", p: "10px", bgcolor: '#F19CBB', marginTop: '15px', display: 'flex', p: 1, justifyContent:'space-between' }}
+                    style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt'}}
+                    button
+                    // onClick={(event) => {
+                    //     handleLoadList(event, idNamePair._id)
+                    // }}
+                    >
+                        <Box sx={{ p:1, fontSize: 30 }}>
+                            {idNamePair.name}
+                            <Box sx={{ fontSize: 20 }}>
+                                By {idNamePair.userName}
+                                <br />
+                                {idNamePair.published != "Nope" ? new Date(idNamePair.published).toDateString() : null}
+                            </Box>
+                        </Box>
+                        <Box sx={{ p: 1, display:'flex' }}>
+                        {idNamePair.published != "Nope" ? <IconButton onClick={handleLike}>
+                                {likeButton}
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{likeCount}</Typography> : null}
+                            {idNamePair.published != "Nope" ? <IconButton onClick={handleDislike}>
+                                {dislikeButton}
+                            </IconButton> : null}
+                            {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
+                        </Box>
+                    </ListItem>
+        ;
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -269,11 +339,11 @@ function ListCard(props) {
                         event.preventDefault()
                       }}
                 >
-                    <ListItem
+                    {/* <ListItem
                     id={idNamePair._id}
                     key={idNamePair._id}
                     sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1, justifyContent:'space-between' }}
-                    style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+                    style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt'}}
                     button
                     // onClick={(event) => {
                     //     handleLoadList(event, idNamePair._id)
@@ -297,7 +367,8 @@ function ListCard(props) {
                             </IconButton> : null}
                             {idNamePair.published != "Nope" ? <Typography variant='h3' sx={{ fontSize:70 }}>{dislikeCount}</Typography> : null}
                         </Box>
-                    </ListItem>
+                    </ListItem> */}
+                    {itemForAccordianSummary}
                 </AccordionSummary>
                 <AccordionDetails>
                     <Box id ='song-cards-container' sx = {{overflowY:'auto', maxHeight: 250}}>
