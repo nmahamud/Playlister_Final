@@ -16,7 +16,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import TextField from '@mui/material/TextField';
 
-export default function AppBanner() {
+export default function NavigationBar() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -27,6 +27,14 @@ export default function AppBanner() {
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
+    if (auth.loggedIn) {
+        if (auth.user.userName == "") {
+            if (cmenu == "Home") {
+                setMenu("Group");
+            }
+        }
+    }
 
     const handleMenuClose = () => {
         setAnchorEl(null);
@@ -105,7 +113,7 @@ export default function AppBanner() {
     }
 
     function handleHomeMenu(event) {
-        if (auth.user.userName != null) {
+        if (auth.user.userName != "") {
             store.changeView("Home");
             setMenu((prevMenu) => {return "Home"});
             store.loadIdNamePairs();

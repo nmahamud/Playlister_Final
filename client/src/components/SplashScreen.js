@@ -1,8 +1,20 @@
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
+import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
+import { useContext } from 'react';
 
 export default function SplashScreen() {
+    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
+    function handleGuest(event) {
+        store.changeView("Group");
+        store.loadIdNamePairsPublic();
+        auth.loginGuest();
+    }
+
     return (
         <div id="splash-screen">
             <img src={'playlister.png'} />
@@ -14,7 +26,7 @@ export default function SplashScreen() {
                 <Button href="/register/" variant='contained'>Create New Account</Button>
             </Box>
             <Box>
-                <Button variant='contained'>Guest</Button>
+                <Button onClick={handleGuest} variant='contained'>Guest</Button>
             </Box>
             <Box sx = {{fontSize:20, m:10 }}>Made By Nazif Mahamud</Box>
         </div>

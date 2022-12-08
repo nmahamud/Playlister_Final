@@ -11,6 +11,7 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import YouTubePlayer from './YouTubePlayer'
 import YouTubeWrapper from './YouTubeWrapper'
+import AuthContext from '../auth'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -18,9 +19,20 @@ import YouTubeWrapper from './YouTubeWrapper'
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        if (auth.loggedIn) {
+            if (auth.user.userName==""){
+                store.loadIdNamePairsPublic();
+            }
+            else {
+                store.loadIdNamePairs();
+            } 
+        }
+        else {
+            store.loadIdNamePairs();
+        }
     }, []);
 
     function isPublished(playList) {
@@ -37,7 +49,7 @@ const HomeScreen = () => {
 
     let listCard = "";
     if (store) {
-        if (store.viewList=="Home") {
+        if (store.viewList=="Home" && auth.userName != "") {
             let pubList = store.idNamePairs;
             switch (store.sortNum) {
                 case (2): {
@@ -70,6 +82,8 @@ const HomeScreen = () => {
                 </List>;
         }
         else {
+            // store.changeView("Group");
+            // store.loadIdNamePairsPublic();
             if (store.searchInput != "") {
                 let pubList = store.idNamePairs.filter(isPublished);
                 if (store.viewList == "Group") {

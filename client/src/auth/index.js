@@ -142,6 +142,17 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.loginGuest = function() {
+        authReducer({
+            type: AuthActionType.LOGIN_USER,
+            payload: {
+                user: {firstName: "Guest", lastName: "User", userName: "", email: "", passwordHash: "", playlists: []},
+                loggedIn: true,
+                errorMessage: null
+            }
+        });
+    }
+
     auth.getUserInitials = function() {
         let initials = "";
         if (auth.user) {

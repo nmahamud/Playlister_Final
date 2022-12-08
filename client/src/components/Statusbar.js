@@ -34,7 +34,7 @@ function Statusbar() {
     //     </div>
     // );
     // }
-    if (store) {
+    if (store && auth.loggedIn) {
         if (store.viewList == "Home") {
             text = 
             <Box textAlign='center' id="playlister-statusbar">

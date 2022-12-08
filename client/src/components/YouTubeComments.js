@@ -35,7 +35,7 @@ export default function YouTubeComments() {
         user=auth.user.userName;
     }
     let list=<div>No List Selected!</div>
-    if (user != "") {
+    // if (user != "") {
         if (comments.length != 0) {
         list = 
         <div>
@@ -54,7 +54,7 @@ export default function YouTubeComments() {
                 }
             </List>
             <Box textAlign='center'>
-                <TextField value={value} onKeyPress={handleKeyPress} onChange={handleChange} fullWidth label='Comment here!'></TextField>
+                <TextField disabled={user==""} value={value} onKeyPress={handleKeyPress} onChange={handleChange} fullWidth label='Comment here!'></TextField>
             </Box>
         </div>
         }
@@ -62,7 +62,7 @@ export default function YouTubeComments() {
             list=<div>No Comments yet!</div>
         }
     
-    }
+    // }
     return (
         <Box id ='song-cards-container' sx = {{overflowY:'auto', maxHeight:800}}>
             {list}

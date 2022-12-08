@@ -123,48 +123,52 @@ function ListCard(props) {
     }
 
     function handleLike(event) {
-        if (!idNamePair.likes.includes(auth.user.userName)) {
-            idNamePair.likes.push(auth.user.userName);
-            setLike((prevLike)=>{return prevLike+1});
-            if (idNamePair.dislikes.includes(auth.user.userName)) {
-                setDislike((prevDislike)=>{return prevDislike-1});
-                let index = idNamePair.dislikes.indexOf(auth.user.userName);
-                idNamePair.dislikes.splice(index,1);
+        if (auth.user.userName != "") {
+            if (!idNamePair.likes.includes(auth.user.userName)) {
+                idNamePair.likes.push(auth.user.userName);
+                setLike((prevLike)=>{return prevLike+1});
+                if (idNamePair.dislikes.includes(auth.user.userName)) {
+                    setDislike((prevDislike)=>{return prevDislike-1});
+                    let index = idNamePair.dislikes.indexOf(auth.user.userName);
+                    idNamePair.dislikes.splice(index,1);
+                }
             }
+            else {
+                setLike((prevLike)=>{return prevLike-1})
+                let index = idNamePair.likes.indexOf(auth.user.userName);
+                idNamePair.likes.splice(index,1);
+            }
+            store.updateListById(idNamePair);
+            // store.changeSort(store.storeNum);
+            event.stopPropagation();
+            event.preventDefault();
         }
-        else {
-            setLike((prevLike)=>{return prevLike-1})
-            let index = idNamePair.likes.indexOf(auth.user.userName);
-            idNamePair.likes.splice(index,1);
-        }
-        store.updateListById(idNamePair);
-        // store.changeSort(store.storeNum);
-        event.stopPropagation();
-        event.preventDefault();
         // store.loadIdNamePairs();
         
     }
 
     function handleDislike(event) {
-        if (!idNamePair.dislikes.includes(auth.user.userName)) {
-            idNamePair.dislikes.push(auth.user.userName);
-            setDislike((prevDislike)=>{return prevDislike+1});
-            if (idNamePair.likes.includes(auth.user.userName)) {
-                setLike((prevLike)=>{return prevLike-1})
-                let index = idNamePair.likes.indexOf(auth.user.userName);
-                idNamePair.likes.splice(index,1);
+        if (auth.user.userName != "") {
+            if (!idNamePair.dislikes.includes(auth.user.userName)) {
+                idNamePair.dislikes.push(auth.user.userName);
+                setDislike((prevDislike)=>{return prevDislike+1});
+                if (idNamePair.likes.includes(auth.user.userName)) {
+                    setLike((prevLike)=>{return prevLike-1})
+                    let index = idNamePair.likes.indexOf(auth.user.userName);
+                    idNamePair.likes.splice(index,1);
+                }
             }
+            else {
+                setDislike((prevDislike)=>{return prevDislike-1});
+                let index = idNamePair.dislikes.indexOf(auth.user.userName);
+                idNamePair.dislikes.splice(index,1);
+            }
+            // event.stopPropagation();
+            store.updateListById(idNamePair);
+            // store.changeSort(store.storeNum);
+            event.stopPropagation();
+            event.preventDefault();
         }
-        else {
-            setDislike((prevDislike)=>{return prevDislike-1});
-            let index = idNamePair.dislikes.indexOf(auth.user.userName);
-            idNamePair.dislikes.splice(index,1);
-        }
-        // event.stopPropagation();
-        store.updateListById(idNamePair);
-        // store.changeSort(store.storeNum);
-        event.stopPropagation();
-        event.preventDefault();
         // store.loadIdNamePairs();
     }
 
