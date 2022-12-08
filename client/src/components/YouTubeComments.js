@@ -54,7 +54,7 @@ export default function YouTubeComments() {
                 }
             </List>
             <Box textAlign='center'>
-                <TextField disabled={user==""} value={value} onKeyPress={handleKeyPress} onChange={handleChange} fullWidth label='Comment here!'></TextField>
+                <TextField disabled={user=="" || store.playerList.published == "Nope"} value={value} onKeyPress={handleKeyPress} onChange={handleChange} fullWidth label='Comment here!'></TextField>
             </Box>
         </div>
         }
